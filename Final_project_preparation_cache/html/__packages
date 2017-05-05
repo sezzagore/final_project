@@ -1,0 +1,11 @@
+base
+ggplot2
+tidyr
+dplyr
+readr
+foreign
+lubridate
+zipcode
+noncensus
+stringr
+maps

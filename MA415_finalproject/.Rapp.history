@@ -1,0 +1,3 @@
+load("/Users/Sezza/Documents/MA415/Final_project/MA415_finalproject/shiny_data.Rdata")
+ls()
+names(df)
