@@ -286,6 +286,29 @@ df_cc$arrival <- mdy_hm(as.numeric(df_cc$arrival))
 # some of the arrival times do not conincide with the day of the incident
 ```
 
+# Number of incidents versus number of victims
+
+Throughout the project I assess the number of victims. However the number of victims is a different measure from the number of fire incidents. The following graphs gives a picture of the evolution of these two. 
+
+```{r}
+df_cc$year <- year(df_cc$inc_date)
+nvictims <- df_cc %>% 
+  group_by(year) %>%
+  summarise(count = n(), type = "#victims")
+nincidents <- df_cc %>% 
+  filter(seq_number == 1) %>% # The number of victims per incident is sometimes bigger 
+  # than one, I needed to isolate the number of incidents. I noticed that seq_number uses 
+  # the number 1 for the first of the victims and since it already starts with 1 I use it 
+  # as a unique identifier for the particular incident 
+  group_by(year)  %>%
+  summarise(count = n(), type = "#incidents")
+
+table_data <- bind_rows(nvictims, nincidents)
+ggplot(data = table_data, aes(x = year, y = count, group = type, col = type)) +
+  geom_line()+ 
+  scale_x_continuous(breaks = unique(table_data$year))
+```
+
 # Data for Mapping 
 
 In the ShinyApp I will be using the data coming from ggplot2 in order to map the data. The map below, is the basis for my maps. Information is then merged to the map data in order to render the results

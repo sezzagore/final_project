@@ -2,6 +2,7 @@
 library(shiny)
 library(ggplot2)
 library(plotly)
+library(maps)
 
 load(file = "shiny_data.Rdata") 
 # This is the list of the states that I will be using throughout the whole app
@@ -70,8 +71,8 @@ tags$br(),
       selectizeInput("state4", "Choose a State", choices = list_of_states[-1], multiple = FALSE, selected = "Massachusetts")
         ),
     selectInput('x', 'X variable', choices = nms, selected = "gender"),
-    selectInput('color', 'Color', choices = nms, selected = "sev"),
-    selectInput('facet_row', 'Facet', c(None = '.', nms), selected = "None")
+    selectInput('color', 'Color', choices = nms[-2], selected = "sev"),
+    selectInput('facet_row', 'Facet', c(None = '.', nms[-2]), selected = "None")
     
   ),
   
@@ -86,6 +87,7 @@ tags$br(),
 tags$h3(" Testing for probabilities of being a victim within the characteristics"),
 tags$p("The following test compares two sub-samples of the population and evaluates whether or 
        not if individuals in each sub-sample have the same probabilty of being victims in a fire incident."),
+tags$p(" Note: I used the terminology used in the data collection, although, personally I would not use this wording."),
 tags$br(),
 sidebarLayout(
   sidebarPanel(

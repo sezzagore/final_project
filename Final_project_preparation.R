@@ -1,6 +1,6 @@
 ## ----code=readLines(knitr::purl('Final_project_preparation.Rmd', documentation = 1)), eval = FALSE, include=FALSE----
-## # the code in the description of the chunck automatically creates/saves a R script from this .Rmd
-## # for some reason, this seems to disallow naming further chuncks
+# the code in the description of the chunck automatically creates/saves a R script from this .Rmd
+# for some reason, this seems to disallow naming further chuncks
 
 ## ---- message=FALSE------------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE, tidy = FALSE, cache = TRUE)
@@ -180,6 +180,24 @@ df_cc$alarm <- mdy_hm(as.numeric(df_cc$alarm))
 df_cc$arrival <- mdy_hm(as.numeric(df_cc$arrival))
 # I am only interested in the day of the incidient as 
 # some of the arrival times do not conincide with the day of the incident
+
+## ------------------------------------------------------------------------
+df_cc$year <- year(df_cc$inc_date)
+nvictims <- df_cc %>% 
+  group_by(year) %>%
+  summarise(count = n(), type = "#victims")
+nincidents <- df_cc %>% 
+  filter(seq_number == 1) %>% # The number of victims per incident is sometimes bigger 
+  # than one, I needed to isolate the number of incidents. I noticed that seq_number uses 
+  # the number 1 for the first of the victims and since it already starts with 1 I use it 
+  # as a unique identifier for the particular incident 
+  group_by(year)  %>%
+  summarise(count = n(), type = "#incidents")
+
+table_data <- bind_rows(nvictims, nincidents)
+ggplot(data = table_data, aes(x = year, y = count, group = type, col = type)) +
+  geom_line()+ 
+  scale_x_continuous(breaks = unique(table_data$year))
 
 ## ------------------------------------------------------------------------
 states <- map_data("state")

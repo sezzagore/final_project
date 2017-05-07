@@ -13,7 +13,7 @@ require(shiny)
 require(lazyeval)
 require(DT)
 require(plotly)
-
+require(maps)
 load("shiny_data.Rdata") # this is my data as constructed in the document
 
 shinyServer(function(input, output) {
